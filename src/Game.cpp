@@ -14,12 +14,26 @@ void Game::initWindow(){
 
     this->window = new sf::RenderWindow(this->videoMode, "SFML Project", sf::Style::Titlebar | sf::Style::Close);
 
+    this->window->setFramerateLimit(144);
+
 }
+
+void Game::initEnemies(){
+    // Vector2f is 
+    this->enemy.setPosition(10.f, 10.f); //units are pixels
+    this->enemy.setSize(sf::Vector2f(100.f, 100.f)); // .f signifies its a float val not a double or int
+    this->enemy.setScale(sf::Vector2f(0.5f, 0.5f));
+    this->enemy.setFillColor(sf::Color::Cyan);
+    this->enemy.setOutlineColor(sf::Color::Green);
+    this->enemy.setOutlineThickness(1.f);
+}
+
 
 Game::Game(){
 
     this->initVariables();
     this->initWindow();
+    this->initEnemies();
 
 }
 
@@ -32,6 +46,12 @@ Game::~Game(){
 void Game::update(){
 
     this->pollEvents();
+
+    // relative to screen
+    std::cout<< "Mouse pos: " << sf::Mouse::getPosition().x << " " <<  sf::Mouse::getPosition().y << "\n";
+
+    //relative to window
+    std::cout<< "Mouse pos: " << sf::Mouse::getPosition(*this->window).x << " " <<  sf::Mouse::getPosition(*this->window).y << "\n";
 
 }
 
@@ -48,9 +68,10 @@ void Game::pollEvents(){
 
 void Game::render(){
 
-    this->window->clear(sf::Color(255, 0, 0, 255));
+    this->window->clear();
 
     //draw stuff below
+    this->window->draw(this->enemy);
 
     this->window->display();
 

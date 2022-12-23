@@ -2,6 +2,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -14,9 +15,12 @@ class Game{
 		sf::RenderWindow* window;
 		sf::Event event;
 		sf::VideoMode videoMode;
+		sf::RectangleShape enemy;
+
 		
 		void initVariables();
 		void initWindow();
+		void initEnemies();
 
 	public:
 		Game(); 
