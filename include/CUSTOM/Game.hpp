@@ -3,6 +3,9 @@
 #define GAME_HPP
 
 #include <iostream>
+#include <vector>
+#include <ctime>
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -15,8 +18,18 @@ class Game{
 		sf::RenderWindow* window;
 		sf::Event event;
 		sf::VideoMode videoMode;
-		sf::RectangleShape enemy;
 
+		//Mouse Position
+		sf::Vector2i mousePosWindow;
+
+		int points;
+		float enemySpawnTimer;
+		float enemySpawnTimerMax;
+		int maxEnemies; 
+
+		// Game objects
+		sf::RectangleShape enemy;
+		std::vector<sf::RectangleShape> enemies;
 		
 		void initVariables();
 		void initWindow();
@@ -31,9 +44,14 @@ class Game{
 		const bool running() const;
 
 		//functions
+		void spawnEnemy();
+		void updateMousePositions();
+		void updateEnemies();
 		void update();
 		void pollEvents();
 		void render();
+		void renderEnemies();
+
 
 };
 

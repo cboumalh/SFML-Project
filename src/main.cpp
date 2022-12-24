@@ -3,6 +3,7 @@
 
 int main(){
     //Init game engine
+    srand(static_cast<unsigned>(time(NULL)));
     Game game;
 
 

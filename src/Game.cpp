@@ -3,7 +3,14 @@
 //Private Functions
 void Game::initVariables(){
 
-    this->window == nullptr;
+    this->window = nullptr;
+
+    this->points = 0;
+    this->enemySpawnTimerMax = 1000.f;
+    this->enemySpawnTimer = this->enemySpawnTimerMax;
+    this->maxEnemies = 5;
+
+
 
 }
 
@@ -26,6 +33,8 @@ void Game::initEnemies(){
     this->enemy.setFillColor(sf::Color::Cyan);
     this->enemy.setOutlineColor(sf::Color::Green);
     this->enemy.setOutlineThickness(1.f);
+
+
 }
 
 
@@ -47,12 +56,9 @@ void Game::update(){
 
     this->pollEvents();
 
-    // relative to screen
-    std::cout<< "Mouse pos: " << sf::Mouse::getPosition().x << " " <<  sf::Mouse::getPosition().y << "\n";
+    this->updateMousePositions();
 
-    //relative to window
-    std::cout<< "Mouse pos: " << sf::Mouse::getPosition(*this->window).x << " " <<  sf::Mouse::getPosition(*this->window).y << "\n";
-
+    this->updateEnemies();
 }
 
 void Game::pollEvents(){
@@ -66,17 +72,68 @@ void Game::pollEvents(){
 
 }
 
+void Game::updateEnemies(){
+    if(static_cast<int>(this->enemies.size()) < this->maxEnemies){
+        if(this->enemySpawnTimer >= this->enemySpawnTimerMax){
+
+            this->spawnEnemy();
+            this->enemySpawnTimer = 0.f;
+        }
+        else{
+
+            this->enemySpawnTimer += 1.f;
+        }
+    }
+
+    for(auto &e : this->enemies){
+        e.move(0.f, 2.f);
+    }
+
+}
+
+
 void Game::render(){
 
     this->window->clear();
 
     //draw stuff below
-    this->window->draw(this->enemy);
+    this->renderEnemies();
 
     this->window->display();
 
 }
 
+void Game::renderEnemies(){
+
+    for(auto &e : this->enemies){
+        this->window->draw(e);
+    }
+    
+}
+
 const bool Game::running() const {
     return this->window->isOpen();
 }
+
+
+void Game::updateMousePositions(){
+    // return void function
+    // updates mouse position relative to window
+    // Vector2i
+
+    this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+}
+
+
+void Game::spawnEnemy(){
+
+    this->enemy.setPosition(
+        static_cast<float>(rand() % static_cast<int>((this->window->getSize().x - this->enemy.getSize().x))),
+        0.f
+    );
+
+    this->enemy.setFillColor(sf::Color::Green);
+
+    this->enemies.push_back(this->enemy);
+}
+
