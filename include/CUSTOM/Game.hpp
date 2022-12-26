@@ -21,6 +21,7 @@ class Game{
 
 		//Mouse Position
 		sf::Vector2i mousePosWindow;
+		sf::Vector2f mousePosView;
 
 		int points;
 		float enemySpawnTimer;

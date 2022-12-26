@@ -6,7 +6,7 @@ void Game::initVariables(){
     this->window = nullptr;
 
     this->points = 0;
-    this->enemySpawnTimerMax = 1000.f;
+    this->enemySpawnTimerMax = 10.f;
     this->enemySpawnTimer = this->enemySpawnTimerMax;
     this->maxEnemies = 5;
 
@@ -21,7 +21,7 @@ void Game::initWindow(){
 
     this->window = new sf::RenderWindow(this->videoMode, "SFML Project", sf::Style::Titlebar | sf::Style::Close);
 
-    this->window->setFramerateLimit(144);
+    this->window->setFramerateLimit(60);
 
 }
 
@@ -31,8 +31,8 @@ void Game::initEnemies(){
     this->enemy.setSize(sf::Vector2f(100.f, 100.f)); // .f signifies its a float val not a double or int
     this->enemy.setScale(sf::Vector2f(0.5f, 0.5f));
     this->enemy.setFillColor(sf::Color::Cyan);
-    this->enemy.setOutlineColor(sf::Color::Green);
-    this->enemy.setOutlineThickness(1.f);
+    // this->enemy.setOutlineColor(sf::Color::Green);
+    // this->enemy.setOutlineThickness(1.f);
 
 
 }
@@ -85,8 +85,30 @@ void Game::updateEnemies(){
         }
     }
 
-    for(auto &e : this->enemies){
-        e.move(0.f, 2.f);
+    for(int i = 0; i < (int) this->enemies.size(); i++){
+        this->enemies[i].move(0.f, 5.f);
+
+        bool deleted = false;
+
+
+        //check if we clicked mouse
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            if(this->enemies[i].getGlobalBounds().contains(this->mousePosView)){
+                deleted = true;
+
+                this->points += 10.f;
+
+            }
+            
+
+        // enemy is past bottom of screen
+        if(this->enemies[i].getPosition().y > this->window->getSize().y)
+            deleted = true;
+        
+
+        if(deleted)
+            this->enemies.erase(this->enemies.begin() + i);
+
     }
 
 }
@@ -122,6 +144,7 @@ void Game::updateMousePositions(){
     // Vector2i
 
     this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+    this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
 }
 
 
