@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <sstream>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -23,10 +24,20 @@ class Game{
 		sf::Vector2i mousePosWindow;
 		sf::Vector2f mousePosView;
 
-		int points;
+		//Resources
+		sf::Font font;
+
+		//Text
+		sf::Text uiText;
+
+		//Game logic
+		bool endGame;
+		unsigned points;
+		int health;
 		float enemySpawnTimer;
 		float enemySpawnTimerMax;
-		int maxEnemies; 
+		int maxEnemies;
+		bool mouseHeld;
 
 		// Game objects
 		sf::RectangleShape enemy;
@@ -34,7 +45,9 @@ class Game{
 		
 		void initVariables();
 		void initWindow();
+		void initText();
 		void initEnemies();
+		void initFonts();
 
 	public:
 		Game(); 
@@ -43,16 +56,21 @@ class Game{
 
 		//Accessors
 		const bool running() const;
+		const bool getEndGame() const;
 
 		//functions
 		void spawnEnemy();
+
+		void pollEvents();
 		void updateMousePositions();
+		void updateText();
 		void updateEnemies();
 		void update();
-		void pollEvents();
-		void render();
-		void renderEnemies();
 
+
+		void render();
+		void renderEnemies(sf::RenderTarget& target);
+		void renderText(sf::RenderTarget& target);
 
 };
 
