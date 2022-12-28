@@ -1,4 +1,4 @@
-#include "../../include/CUSTOM/Game.hpp"
+#include "../../include/CUSTOM/Game_1.hpp"
 
 //Private Functions
 void Game::initVariables(){
@@ -258,3 +258,6 @@ void Game::renderText(sf::RenderTarget& target){
     target.draw(this->uiText);
 
 }
+
+
+

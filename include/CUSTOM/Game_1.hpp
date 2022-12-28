@@ -1,6 +1,6 @@
 //Class that acts as game engine
-#ifndef GAME_HPP
-#define GAME_HPP
+#ifndef GAME_1_HPP
+#define GAME_1_HPP
 
 #include <iostream>
 #include <vector>

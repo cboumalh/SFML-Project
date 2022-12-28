@@ -8,11 +8,11 @@ project: main.o Game.o
 	$(CC) -Wall main.o Game.o -o project -L ../../lib $(SFMLFLAGS)
 	
 
-main.o: main.cpp ../../include/CUSTOM/Game_1.hpp
+main.o: main.cpp ../../include/CUSTOM/Game_2.hpp
 	$(CC) $(CFLAGS) main.cpp -I ../../include
 
 
-Game.o: Game.cpp ../../include/CUSTOM/Game_1.hpp
+Game.o: Game.cpp ../../include/CUSTOM/Game_2.hpp
 	$(CC) $(CFLAGS) Game.cpp -I ../../include
 
 

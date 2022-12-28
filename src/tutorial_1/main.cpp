@@ -1,4 +1,4 @@
-#include "../../include/CUSTOM/Game.hpp"
+#include "../../include/CUSTOM/Game_1.hpp"
 
 
 int main(){
@@ -7,14 +7,14 @@ int main(){
     Game game;
 
 
-	while(game.running() && !game.getEndGame()){
+    while(game.running() && !game.getEndGame()){
 		
         game.update();
 
         game.render();
 
 	}
-
+    
 
     return 0;
 }
