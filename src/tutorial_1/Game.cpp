@@ -152,7 +152,8 @@ void Game::updateEnemies(){
 
 void Game::initFonts(){
 
-    this->font.loadFromFile("../fonts/Caladea-Regular.ttf");
+    if(!this->font.loadFromFile("../fonts/Caladea-Regular.ttf"))
+        return EXIT_FAILURE
 }
 
 void Game::initText(){
