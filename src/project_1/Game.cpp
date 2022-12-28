@@ -150,10 +150,12 @@ void Game::updateEnemies(){
 
 }
 
-void Game::initFonts(){
+int Game::initFonts(){
 
     if(!this->font.loadFromFile("../fonts/Caladea-Regular.ttf"))
-        return EXIT_FAILURE
+        return EXIT_FAILURE;
+
+    return EXIT_SUCCESS;
 }
 
 void Game::initText(){

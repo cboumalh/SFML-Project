@@ -47,7 +47,7 @@ class Game{
 		void initWindow();
 		void initText();
 		void initEnemies();
-		void initFonts();
+		int initFonts();
 
 	public:
 		Game(); 

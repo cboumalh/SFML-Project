@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export LD_LIBRARY_PATH=../lib && ../src/tutorial_2/project
+export LD_LIBRARY_PATH=../lib && ../src/project_2/project
 
 
 

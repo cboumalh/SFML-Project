@@ -1,15 +1,7 @@
 //Class that acts as game engine
 #ifndef GAME_2_HPP
 #define GAME_2_HPP
-
-#include<iosteam>
-#include<ctime>
-
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
+#include "Player_2.hpp"
 
 class Game{
 
@@ -17,6 +9,9 @@ class Game{
         sf::VideoMode videoMode;
         sf::RenderWindow *window;
         bool endGame;
+        sf::Event sfmlEvent;
+
+        Player player;
     
     
         void initVariables();
@@ -35,6 +30,8 @@ class Game{
         //Functions
         void update();
         void render();
+        const bool running() const;
+        void pollEvents();
         
         //Modifiers
     
