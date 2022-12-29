@@ -15,9 +15,9 @@ class Ball{
     private:
         sf::CircleShape shape;
 
-        void initShape();  
+        void initShape(const sf::RenderWindow *window);  
     public:
-        Ball();
+        Ball(const sf::RenderWindow *window);
         virtual ~Ball();
 
 

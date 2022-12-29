@@ -1,7 +1,9 @@
 //Class that acts as game engine
 #ifndef GAME_2_HPP
 #define GAME_2_HPP
+#include <vector>
 #include "Player_2.hpp"
+#include "Ball_2.hpp"
 
 class Game{
 
@@ -16,6 +18,11 @@ class Game{
     
         void initVariables();
         void initWindow();
+        std::vector<Ball> balls;
+        float spawnTimerMax;
+        float spawnTimer;
+        int maxNbrBalls;
+
 	
 	public:
         //Constructor and destructor
@@ -30,6 +37,7 @@ class Game{
         //Functions
         void update();
         void render();
+        void spawnBalls();
         const bool running() const;
         void pollEvents();
         
