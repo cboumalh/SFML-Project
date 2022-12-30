@@ -1,11 +1,11 @@
 all:
-	make -C project_1
-	make -C project_2
+	make -C miniproject1
+	make -C miniproject2
 	
 
 clean:
-	make clean -C project_1
-	make clean -C project_2
+	make clean -C miniproject1
+	make clean -C miniproject2
 
 
 .PHONY: all clean
