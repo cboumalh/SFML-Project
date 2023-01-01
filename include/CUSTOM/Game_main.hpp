@@ -21,10 +21,7 @@ class Game{
         Game();
         ~Game();
 
-
-  
         const bool &getEndGame() const;
-
 
         void update();
         void render();

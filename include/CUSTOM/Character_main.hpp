@@ -21,7 +21,6 @@ class Character{
         float movementSpeed;
         int currDirection;
 
-
         void initVariables();
         void initTextures();
         void initSprites();
@@ -31,7 +30,6 @@ class Character{
     public:
         Character();
         virtual ~Character();
-
             
         void update(const sf::RenderTarget *target);
         void render(sf::RenderTarget *target);

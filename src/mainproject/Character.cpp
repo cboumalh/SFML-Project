@@ -165,19 +165,23 @@ void Character::render(sf::RenderTarget *target){
 
 
 void Character::updateWindowBoundsCollision(const sf::RenderTarget *target){
-    //sf::FloatRect playerBounds = this->shape.getGlobalBounds();
+    sf::FloatRect playerBounds = this->sprites[this->whichSprite()].getGlobalBounds();
+    
+    if(this->sprites[this->whichSprite()].getGlobalBounds().left <= 0.f)
+        for(int i = 0; i < this->nbrSprites; i++)
+            this->sprites[i].setPosition(0, playerBounds.top); 
 
-    //if(this->shape.getGlobalBounds().left <= 0.f)
-     //   this->shape.setPosition(0, playerBounds.top);
+    else if(this->sprites[this->whichSprite()].getGlobalBounds().left + this->sprites[this->whichSprite()].getGlobalBounds().width >= target->getSize().x)
+        for(int i = 0; i < this->nbrSprites; i++)
+            this->sprites[i].setPosition(target->getSize().x - this->sprites[this->whichSprite()].getGlobalBounds().width, this->sprites[this->whichSprite()].getGlobalBounds().top);
 
-    //else if(this->shape.getGlobalBounds().left + this->shape.getGlobalBounds().width >= target->getSize().x)
-      //  this->shape.setPosition(target->getSize().x - this->shape.getGlobalBounds().width, this->shape.getGlobalBounds().top);
+    if(this->sprites[this->whichSprite()].getGlobalBounds().top <= 0.f)
+        for(int i = 0; i < this->nbrSprites; i++)
+            this->sprites[i].setPosition(this->sprites[this->whichSprite()].getGlobalBounds().left, 0.f);
 
-    //if(this->shape.getGlobalBounds().top <= 0.f)
-      //  this->shape.setPosition(this->shape.getGlobalBounds().left, 0.f);
-
-    //else if(this->shape.getGlobalBounds().top + this->shape.getGlobalBounds().height >= target->getSize().y)
-      //  this->shape.setPosition(this->shape.getGlobalBounds().left, target->getSize().y - this->shape.getGlobalBounds().height);
+    else if(this->sprites[this->whichSprite()].getGlobalBounds().top + this->sprites[this->whichSprite()].getGlobalBounds().height >= target->getSize().y)
+        for(int i = 0; i < this->nbrSprites; i++)
+            this->sprites[i].setPosition(this->sprites[this->whichSprite()].getGlobalBounds().left, target->getSize().y - this->sprites[this->whichSprite()].getGlobalBounds().height);
 
 }
 
