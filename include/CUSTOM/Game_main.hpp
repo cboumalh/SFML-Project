@@ -9,12 +9,16 @@ class Game{
 	private:
         sf::VideoMode videoMode;
         sf::RenderWindow *window;
+        sf::Texture backgroundTexture;
+        sf::Sprite backgroundSprite;
         bool endGame;
         sf::Event sfmlEvent;
         Character player;
 
         void initVariables();
         void initWindow();
+        void initBackground();
+        void renderBackground();
 
 	public:
 

@@ -11,11 +11,15 @@ Game::~Game(){
 Game::Game(){
     this->initVariables();
     this->initWindow();
+    this->initBackground();
 }
 
 
 
 void Game::initVariables(){
+    if(!this->backgroundTexture.loadFromFile("../textures/background.png"))
+        std::cout<<"TEXTURE DID NOT LOAD \n";
+    this->backgroundSprite.setTexture(this->backgroundTexture);
     this->endGame = false;
 }
 
@@ -27,10 +31,25 @@ void Game::initWindow(){
 
 }
 
+void Game::initBackground(){
+
+    this->backgroundSprite.setScale(
+        this->window->getSize().x / this->backgroundSprite.getLocalBounds().width,
+        this->window->getSize().y / this->backgroundSprite.getLocalBounds().height
+    );
+}
+
+void Game::renderBackground(){
+
+    this->window->draw(this->backgroundSprite); 
+}
+
 
 void Game::render(){
     this->window->clear();
-    
+
+    this->renderBackground();
+
     this->player.render(this->window);
 
     this->window->display();
