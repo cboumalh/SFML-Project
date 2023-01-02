@@ -3,10 +3,10 @@
 #define GAME_MAIN_HPP
 
 #include "Character_main.hpp"
+#include "Car_main.hpp"
 
 class Game{
-
-	private:
+    private:
         sf::VideoMode videoMode;
         sf::RenderWindow *window;
         sf::View view;
@@ -19,6 +19,7 @@ class Game{
         sf::Event sfmlEvent;
 
         Character player;
+        Car cars;
 
         void initVariables();
         void initWindow();
@@ -27,7 +28,7 @@ class Game{
         void renderBackground();
         void updateView();
 
-	public:
+    public:
 
         Game();
         ~Game();

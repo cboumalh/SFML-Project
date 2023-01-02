@@ -24,7 +24,7 @@ class Character{
         void initSprite();
         void initSpritePos();
         void updateSprite();
-
+        
     public:
         Character();
         virtual ~Character();

@@ -26,10 +26,10 @@ void Game::initVariables(){
 
 void Game::initWindow(){
     this->videoMode = sf::VideoMode(this->width, this->height);
-    this->window = new sf::RenderWindow(this->videoMode, "Game 2", sf::Style::Close | sf::Style::Titlebar);
+    this->window = new sf::RenderWindow(this->videoMode, "Traffic Survival!", sf::Style::Close | sf::Style::Titlebar);
 
     this->window->setFramerateLimit(140);
-    //this->window->setView(this->view);
+    this->window->setView(this->view);
 
 }
 
@@ -56,7 +56,7 @@ void Game::updateView(){
         this->view.setCenter(playerPos.left, half_window_height);
 
 
-    //this->window->setView(this->view);
+    this->window->setView(this->view);
 }
 
 void Game::initBackground(){
