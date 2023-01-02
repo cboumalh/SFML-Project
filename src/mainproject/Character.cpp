@@ -9,7 +9,7 @@ Character::Character(){
 }
 
 Character::~Character(){
-    //empty
+    delete[] this->textures;
 }
 
 
@@ -17,6 +17,8 @@ void Character::initVariables(){
     this->currDirection = 0;
     this->movementSpeed = 2.5f;
     this->textureChoice = 0;
+    this->nbrTextures = 12;
+    this->textures = new sf::Texture[this->nbrTextures];
 
 }
 

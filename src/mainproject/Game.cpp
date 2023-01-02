@@ -3,14 +3,16 @@
 
 Game::~Game(){
     delete this->window;
+    delete this->player;
 }
 
 
 Game::Game(){
     this->initVariables();
+    this->initBackgroundTexture();
     this->initView();
     this->initWindow();
-    this->initBackground();
+    this->initBackgroundSprite();
 }
 
 
@@ -18,10 +20,18 @@ Game::Game(){
 void Game::initVariables(){
     this->width = 800.f;
     this->height = 600.f;
+    this->endGame = false;
+    this->player = new Character();
+    this->cars.push_back(new Car("../textures/car_1.png", 415.f, 800.f, 1.5f, 'U'));
+    this->cars.push_back(new Car("../textures/car_2.png", 350.f, 0.f, 1.5f, 'D'));
+    this->cars.push_back(new Car("../textures/car_3.png", 0.f, 350.f, 1.5f, 'R'));
+    this->cars.push_back(new Car("../textures/car_4.png", 600.f, 300.f, 1.5f, 'L'));
+
+}
+
+void Game::initBackgroundTexture(){
     if(!this->backgroundTexture.loadFromFile("../textures/background.png"))
         std::cout<<"TEXTURE DID NOT LOAD \n";
-    this->backgroundSprite.setTexture(this->backgroundTexture);
-    this->endGame = false;
 }
 
 void Game::initWindow(){
@@ -34,13 +44,13 @@ void Game::initWindow(){
 }
 
 void Game::initView(){
-    this->view.setCenter(sf::Vector2f(this->width - this->player.getPlayerPos().width / 2.f, this->height - this->player.getPlayerPos().height / 2.f));
+    this->view.setCenter(sf::Vector2f(this->width - this->player->getPlayerPos().width / 2.f, this->height - this->player->getPlayerPos().height / 2.f));
     this->view.setSize(sf::Vector2f(this->width / 2.f , this->height / 2.f));
 
 }
 
 void Game::updateView(){
-    auto playerPos = this->player.getPlayerPos();
+    auto playerPos = this->player->getPlayerPos();
     auto half_window_height = this->height / 4.f;
     auto half_window_width = this->width / 4.f;
 
@@ -59,7 +69,8 @@ void Game::updateView(){
     this->window->setView(this->view);
 }
 
-void Game::initBackground(){
+void Game::initBackgroundSprite(){
+    this->backgroundSprite.setTexture(this->backgroundTexture);
 
     this->backgroundSprite.setScale(
         this->window->getSize().x / this->backgroundSprite.getLocalBounds().width,
@@ -78,7 +89,10 @@ void Game::render(){
 
     this->renderBackground();
 
-    this->player.render(this->window);
+    for(auto &car : this->cars)
+        car->render(this->window);
+
+    this->player->render(this->window);
 
     this->window->display();
 
@@ -88,7 +102,9 @@ void Game::render(){
 void Game::update(){
 
     this->pollEvents();
-    this->player.update(this->window);
+    for(auto &car : this->cars)
+        car->update(this->window);
+    this->player->update(this->window);
     this->updateView();
 }
 

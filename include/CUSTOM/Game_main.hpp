@@ -18,13 +18,14 @@ class Game{
         bool endGame;
         sf::Event sfmlEvent;
 
-        Character player;
-        Car cars;
+        Character *player;
+        std::vector<Car*> cars;
 
         void initVariables();
         void initWindow();
         void initView();
-        void initBackground();
+        void initBackgroundSprite();
+        void initBackgroundTexture();
         void renderBackground();
         void updateView();
 

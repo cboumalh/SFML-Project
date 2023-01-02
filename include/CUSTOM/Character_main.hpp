@@ -4,6 +4,7 @@
 
 #include<iostream>
 #include<ctime>
+#include <vector>
 
 #include<SFML/Graphics.hpp>
 #include<SFML/Window.hpp>
@@ -13,11 +14,12 @@
 
 class Character{
     private:
-        sf::Texture textures[12];
+        sf::Texture *textures;
         sf::Sprite sprite;
         unsigned int textureChoice;
         float movementSpeed;
         unsigned int currDirection;
+        unsigned int nbrTextures;
 
         void initVariables();
         void initTextures();
