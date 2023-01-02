@@ -10,10 +10,14 @@ class Game{
         sf::VideoMode videoMode;
         sf::RenderWindow *window;
         sf::View view;
+        float width;
+        float height;
         sf::Texture backgroundTexture;
         sf::Sprite backgroundSprite;
+
         bool endGame;
         sf::Event sfmlEvent;
+
         Character player;
 
         void initVariables();
@@ -34,8 +38,6 @@ class Game{
         void render();
         const bool running() const;
         void pollEvents();
-
-    
 		
 };
 

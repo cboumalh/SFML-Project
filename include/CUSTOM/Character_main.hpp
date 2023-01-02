@@ -14,17 +14,16 @@
 class Character{
     private:
         sf::Texture textures[12];
-        sf::Sprite sprites[12];
-        int nbrSprites;
-        int money;
-        int spriteChoice;
+        sf::Sprite sprite;
+        unsigned int textureChoice;
         float movementSpeed;
-        int currDirection;
+        unsigned int currDirection;
 
         void initVariables();
         void initTextures();
-        void initSprites();
-        void initSpritePos(const float x, const float y);
+        void initSprite();
+        void initSpritePos();
+        void updateSprite();
 
     public:
         Character();
@@ -33,10 +32,9 @@ class Character{
         void update(const sf::RenderTarget *target);
         void render(sf::RenderTarget *target);
         
-        const int whichSprite();
+        const int whichTexture();
         void updateWindowBoundsCollision(const sf::RenderTarget *target);
-        void setPos(const int spriteIndex, const float x, const float y);
-        const sf::FloatRect  getPlayerPos() const;
+        const sf::FloatRect getPlayerPos() const;
         void moveCharacter();
 
 

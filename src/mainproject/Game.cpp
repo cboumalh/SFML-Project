@@ -2,9 +2,7 @@
 
 
 Game::~Game(){
-    
     delete this->window;
-
 }
 
 
@@ -18,6 +16,8 @@ Game::Game(){
 
 
 void Game::initVariables(){
+    this->width = 800.f;
+    this->height = 600.f;
     if(!this->backgroundTexture.loadFromFile("../textures/background.png"))
         std::cout<<"TEXTURE DID NOT LOAD \n";
     this->backgroundSprite.setTexture(this->backgroundTexture);
@@ -25,36 +25,38 @@ void Game::initVariables(){
 }
 
 void Game::initWindow(){
-    this->videoMode = sf::VideoMode(800, 600);
+    this->videoMode = sf::VideoMode(this->width, this->height);
     this->window = new sf::RenderWindow(this->videoMode, "Game 2", sf::Style::Close | sf::Style::Titlebar);
 
     this->window->setFramerateLimit(140);
-    this->window->setView(this->view);
+    //this->window->setView(this->view);
 
 }
 
 void Game::initView(){
-    this->view.setCenter(sf::Vector2f(400.f, 300.f));
-    this->view.setSize(sf::Vector2f(400.f, 300.f));
+    this->view.setCenter(sf::Vector2f(this->width - this->player.getPlayerPos().width / 2.f, this->height - this->player.getPlayerPos().height / 2.f));
+    this->view.setSize(sf::Vector2f(this->width / 2.f , this->height / 2.f));
 
 }
 
 void Game::updateView(){
     auto playerPos = this->player.getPlayerPos();
+    auto half_window_height = this->height / 4.f;
+    auto half_window_width = this->width / 4.f;
 
-    if(playerPos.left <= 600 && playerPos.left >= 205 && playerPos.top <= 450 && playerPos.top >= 150)
+    if(playerPos.left <= this->width - half_window_width && playerPos.left >= half_window_width && playerPos.top <= this->height - half_window_height && playerPos.top >= half_window_height)
         this->view.setCenter(playerPos.left, playerPos.top);
-    else if(playerPos.left >= 600 && playerPos.top <= 450 && playerPos.top >= 150)
-        this->view.setCenter(600, playerPos.top);
-    else if(playerPos.left <= 205 && playerPos.top <= 450 && playerPos.top >= 150)
-        this->view.setCenter(205, playerPos.top);
-    else if(playerPos.top >= 450 && playerPos.left <= 600 && playerPos.left >= 205)
-        this->view.setCenter(playerPos.left, 450);
-    else if(playerPos.top <= 150 && playerPos.left <= 600 && playerPos.left >= 205)
-        this->view.setCenter(playerPos.left, 150);
+    else if(playerPos.left >= this->width - half_window_width && playerPos.top <= this->height - half_window_height && playerPos.top >= half_window_height)
+        this->view.setCenter(this->width - half_window_width, playerPos.top);
+    else if(playerPos.left <= half_window_width && playerPos.top <= this->height - half_window_height && playerPos.top >= half_window_height)
+        this->view.setCenter(half_window_width, playerPos.top);
+    else if(playerPos.top >= this->height - half_window_height && playerPos.left <= this->width - half_window_width && playerPos.left >= half_window_width)
+        this->view.setCenter(playerPos.left, this->height - half_window_height);
+    else if(playerPos.top <= half_window_height && playerPos.left <= this->width - half_window_width && playerPos.left >= half_window_width)
+        this->view.setCenter(playerPos.left, half_window_height);
 
 
-    this->window->setView(this->view);
+    //this->window->setView(this->view);
 }
 
 void Game::initBackground(){
