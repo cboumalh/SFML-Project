@@ -106,12 +106,18 @@ void Character::moveCharacter(){
 
 
 const int Character::whichSprite(){
-    
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
         this->currDirection = 6;
 
-        if(this->spriteChoice == 0) return 6;
-        else if(this->spriteChoice == 1) return 7; 
+        if(this->spriteChoice == 0){
+            this->spriteChoice += 1;
+            return 6;
+        }
+        else if(this->spriteChoice == 1){
+            this->spriteChoice += 1;
+            return 7;
+        }
         else {
             this->spriteChoice = 0;
             return 8;
@@ -121,8 +127,14 @@ const int Character::whichSprite(){
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
         this->currDirection = 9;
 
-        if(this->spriteChoice == 0) return 9;
-        else if(this->spriteChoice == 1) return 10;
+        if(this->spriteChoice == 0){
+            this->spriteChoice += 1;
+            return 9;
+        }
+        else if(this->spriteChoice == 1){
+            this->spriteChoice += 1;
+            return 10;
+        }
         else {
             this->spriteChoice = 0;
             return 11;
@@ -132,8 +144,14 @@ const int Character::whichSprite(){
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
         this->currDirection = 3;
     
-        if(this->spriteChoice == 0) return 3;
-        else if(this->spriteChoice == 1) return 4;
+        if(this->spriteChoice == 0){
+            this->spriteChoice += 1;
+            return 3;
+        }
+        else if(this->spriteChoice == 1){
+            this->spriteChoice += 1;
+            return 4;
+        }
         else{
             this->spriteChoice = 0;
             return 5;
@@ -144,15 +162,20 @@ const int Character::whichSprite(){
     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
         this->currDirection = 0;    
     
-        if(this->spriteChoice == 0) return 0;
-        else if(this->spriteChoice == 1) return 1;
+        if(this->spriteChoice == 0){
+            this->spriteChoice += 1;
+            return 0;
+        } 
+        else if(this->spriteChoice == 1){
+            this->spriteChoice += 1;
+            return 1;
+        }
         else{
             this->spriteChoice = 0;
             return 2;
         }
     }
-
-    
+ 
     return this->currDirection;
   
 }
@@ -185,7 +208,9 @@ void Character::updateWindowBoundsCollision(const sf::RenderTarget *target){
 
 }
 
-
+const sf::FloatRect Character::getPlayerPos() const {
+    return this->sprites[0].getGlobalBounds();
+}
 
 
 

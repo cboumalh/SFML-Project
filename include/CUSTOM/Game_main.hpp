@@ -9,6 +9,7 @@ class Game{
 	private:
         sf::VideoMode videoMode;
         sf::RenderWindow *window;
+        sf::View view;
         sf::Texture backgroundTexture;
         sf::Sprite backgroundSprite;
         bool endGame;
@@ -17,8 +18,10 @@ class Game{
 
         void initVariables();
         void initWindow();
+        void initView();
         void initBackground();
         void renderBackground();
+        void updateView();
 
 	public:
 

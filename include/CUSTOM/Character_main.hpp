@@ -25,7 +25,6 @@ class Character{
         void initTextures();
         void initSprites();
         void initSpritePos(const float x, const float y);
-        void moveCharacter();
 
     public:
         Character();
@@ -36,7 +35,9 @@ class Character{
         
         const int whichSprite();
         void updateWindowBoundsCollision(const sf::RenderTarget *target);
-        void setPos(const int spriteIndex, const float x, const float y); 
+        void setPos(const int spriteIndex, const float x, const float y);
+        const sf::FloatRect  getPlayerPos() const;
+        void moveCharacter();
 
 
 
