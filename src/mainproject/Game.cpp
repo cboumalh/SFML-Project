@@ -22,10 +22,10 @@ void Game::initVariables(){
     this->height = 800.f;
     this->endGame = false;
     this->player = new Character();
-    this->cars.push_back(new Car("../textures/car_1.png", this->width / 2.f + 15.f, this->width / 2.f, 1.2f, 'U'));
-    this->cars.push_back(new Car("../textures/car_2.png", this->width / 2.1f, this->height / 2.f, 1.2f, 'D'));
-    this->cars.push_back(new Car("../textures/car_3.png", 0.f, this->height / 1.8f, 1.2f, 'R'));
-    this->cars.push_back(new Car("../textures/car_4.png", this->width, this->height / 2.1f, 1.2f, 'L'));
+    this->cars.push_back(new Car("../textures/car_1.png", this->width / 2.f + 15.f, this->width / 2.f, 3.f, 'U'));
+    this->cars.push_back(new Car("../textures/car_2.png", this->width / 2.1f, this->height / 2.f, 3.f, 'D'));
+    this->cars.push_back(new Car("../textures/car_3.png", 0.f, this->height / 1.8f, 3.f, 'R'));
+    this->cars.push_back(new Car("../textures/car_4.png", this->width, this->height / 2.1f, 3.f, 'L'));
 
 }
 
@@ -39,7 +39,7 @@ void Game::initWindow(){
     this->window = new sf::RenderWindow(this->videoMode, "Traffic Survival!", sf::Style::Close | sf::Style::Titlebar);
 
     this->window->setFramerateLimit(140);
-    //this->window->setView(this->view);
+    this->window->setView(this->view);
 
 }
 
@@ -66,7 +66,7 @@ void Game::updateView(){
         this->view.setCenter(playerPos.left, half_window_height);
 
 
-    //this->window->setView(this->view);
+    this->window->setView(this->view);
 }
 
 void Game::initBackgroundSprite(){
@@ -104,7 +104,8 @@ void Game::update(){
     this->pollEvents();
     for(auto &car : this->cars)
         car->update(this->window);
-    this->handleCarCollisions();
+    this->handleVerticalCarCollisions();
+    this->handleHorizontalCarCollisions();
     this->player->update(this->window);
     this->updateView();
 }
@@ -129,83 +130,156 @@ const bool & Game::getEndGame() const {
     return this->endGame;
 }
 
-void Game::handleCarCollisions(){
+void Game::handleVerticalCarCollisions(){
+    //collisions where cars moving vertically hit cars moving across
+    const unsigned int carGoingUp = 0;
+    const unsigned int carGoingDown = 1;
+    const unsigned int carGoingRight = 2;
+    const unsigned int carGoingLeft = 3;
 
-    unsigned int carGoingUp = 0;
-    unsigned int carGoingDown = 1;
-    unsigned int carGoingRight = 2;
-    unsigned int carGoingLeft = 3;
+    const float collisionDist = 5.f;
+    const float removeEmptyCollisionSpace = 8.f;
 
-    // For car going up intersecting with cars going across
+    //Car going up hits car going right as it is on its way
     if(this->cars[carGoingUp]->checkCarCollision(*this->cars[carGoingRight])){
-        if(this->cars[carGoingUp]->getSprite().getGlobalBounds().top > this->cars[carGoingRight]->getSprite().getGlobalBounds().top){
+        auto y_coord = this->cars[carGoingUp]->getSprite().getGlobalBounds().top - collisionDist;
+        auto x_coord_1 = this->cars[carGoingUp]->getSprite().getGlobalBounds().left + removeEmptyCollisionSpace;
+        auto x_coord_2 = this->cars[carGoingUp]->getSprite().getGlobalBounds().left + this->cars[carGoingUp]->getSprite().getGlobalBounds().width - removeEmptyCollisionSpace;
+
+        if(this->cars[carGoingRight]->getSprite().getGlobalBounds().contains(x_coord_1, y_coord))
             this->cars[carGoingUp]->setStopSprite(true);
-            if(this->cars[carGoingRight]->isSpriteMoving() == true) this->cars[carGoingRight]->setStopSprite(false);
-            return;
-        }
-        else if(this->cars[carGoingUp]->getSprite().getGlobalBounds().left > this->cars[carGoingRight]->getSprite().getGlobalBounds().left){
-            this->cars[carGoingRight]->setStopSprite(true);
-            if(this->cars[carGoingUp]->isSpriteMoving() == true) this->cars[carGoingUp]->setStopSprite(false);
-            return;
-        }
+        else if(this->cars[carGoingRight]->getSprite().getGlobalBounds().contains(x_coord_2, y_coord))
+            this->cars[carGoingUp]->setStopSprite(true);
+
+        return;
     }
-    else{
+    else
         this->cars[carGoingUp]->setStopSprite(false);
-        this->cars[carGoingRight]->setStopSprite(false);
-    }
+
+    //Car going up hits car going left as it is on its way
     if(this->cars[carGoingUp]->checkCarCollision(*this->cars[carGoingLeft])){
-        if(this->cars[carGoingUp]->getSprite().getGlobalBounds().top > this->cars[carGoingLeft]->getSprite().getGlobalBounds().top){
+        auto y_coord = this->cars[carGoingUp]->getSprite().getGlobalBounds().top - collisionDist;
+        auto x_coord_1 = this->cars[carGoingUp]->getSprite().getGlobalBounds().left + removeEmptyCollisionSpace;
+        auto x_coord_2 = this->cars[carGoingUp]->getSprite().getGlobalBounds().left + this->cars[carGoingUp]->getSprite().getGlobalBounds().width - removeEmptyCollisionSpace;
+
+        if(this->cars[carGoingLeft]->getSprite().getGlobalBounds().contains(x_coord_1, y_coord))
             this->cars[carGoingUp]->setStopSprite(true);
-            if(this->cars[carGoingLeft]->isSpriteMoving() == true) this->cars[carGoingLeft]->setStopSprite(false);
-            return;
+        else if(this->cars[carGoingLeft]->getSprite().getGlobalBounds().contains(x_coord_2, y_coord))
+            this->cars[carGoingUp]->setStopSprite(true);
 
-        }
-        else if(this->cars[carGoingUp]->getSprite().getGlobalBounds().left < this->cars[carGoingLeft]->getSprite().getGlobalBounds().left){
-            this->cars[carGoingLeft]->setStopSprite(true);
-            if(this->cars[carGoingUp]->isSpriteMoving() == true) this->cars[carGoingUp]->setStopSprite(false);
-            return; 
-        }
+        return;
     }
-    else{
+    else
         this->cars[carGoingUp]->setStopSprite(false);
-        this->cars[carGoingLeft]->setStopSprite(false);
-    }
 
-
-    // For car going down intersecting with cars going across
+    //Car going down hits car going right as it is on its way
     if(this->cars[carGoingDown]->checkCarCollision(*this->cars[carGoingRight])){
-        if(this->cars[carGoingDown]->getSprite().getGlobalBounds().top < this->cars[carGoingRight]->getSprite().getGlobalBounds().top){
-            this->cars[carGoingDown]->setStopSprite(true);
-            if(this->cars[carGoingRight]->isSpriteMoving() == true) this->cars[carGoingRight]->setStopSprite(false);
-            return;
-        }
-        else if(this->cars[carGoingDown]->getSprite().getGlobalBounds().left > this->cars[carGoingRight]->getSprite().getGlobalBounds().left){
-            this->cars[carGoingRight]->setStopSprite(true);
-            if(this->cars[carGoingDown]->isSpriteMoving() == true) this->cars[carGoingDown]->setStopSprite(false);
-            return;
-        }
-    }
-    else{
-        this->cars[carGoingDown]->setStopSprite(false);
-        this->cars[carGoingRight]->setStopSprite(false);
-    }
-    if(this->cars[carGoingDown]->checkCarCollision(*this->cars[carGoingLeft])){
-        if(this->cars[carGoingDown]->getSprite().getGlobalBounds().top < this->cars[carGoingLeft]->getSprite().getGlobalBounds().top){
-            this->cars[carGoingDown]->setStopSprite(true);
-            if(this->cars[carGoingLeft]->isSpriteMoving() == true) this->cars[carGoingLeft]->setStopSprite(false);
-            return;
+        auto y_coord = this->cars[carGoingDown]->getSprite().getGlobalBounds().top + this->cars[carGoingDown]->getSprite().getGlobalBounds().height + collisionDist;
+        auto x_coord_1 = this->cars[carGoingDown]->getSprite().getGlobalBounds().left + removeEmptyCollisionSpace;
+        auto x_coord_2 = this->cars[carGoingDown]->getSprite().getGlobalBounds().left + this->cars[carGoingDown]->getSprite().getGlobalBounds().width - removeEmptyCollisionSpace;
 
-        }
-        else if(this->cars[carGoingDown]->getSprite().getGlobalBounds().left > this->cars[carGoingLeft]->getSprite().getGlobalBounds().left){
-            this->cars[carGoingLeft]->setStopSprite(true);
-            if(this->cars[carGoingDown]->isSpriteMoving() == true) this->cars[carGoingDown]->setStopSprite(false);
-            return; 
-        }
+        if(this->cars[carGoingRight]->getSprite().getGlobalBounds().contains(x_coord_1, y_coord))
+            this->cars[carGoingDown]->setStopSprite(true);
+        else if(this->cars[carGoingRight]->getSprite().getGlobalBounds().contains(x_coord_2, y_coord))
+            this->cars[carGoingDown]->setStopSprite(true);
+
+        return;
     }
-    else{
+    else
         this->cars[carGoingDown]->setStopSprite(false);
-        this->cars[carGoingLeft]->setStopSprite(false);
+
+    //Car going down hits car going left as it is on its way
+    if(this->cars[carGoingDown]->checkCarCollision(*this->cars[carGoingLeft])){
+        auto y_coord = this->cars[carGoingDown]->getSprite().getGlobalBounds().top + this->cars[carGoingDown]->getSprite().getGlobalBounds().height + collisionDist;
+        auto x_coord_1 = this->cars[carGoingDown]->getSprite().getGlobalBounds().left + removeEmptyCollisionSpace;
+        auto x_coord_2 = this->cars[carGoingDown]->getSprite().getGlobalBounds().left + this->cars[carGoingDown]->getSprite().getGlobalBounds().width - removeEmptyCollisionSpace;
+
+        if(this->cars[carGoingLeft]->getSprite().getGlobalBounds().contains(x_coord_1, y_coord))
+            this->cars[carGoingDown]->setStopSprite(true);
+        else if(this->cars[carGoingLeft]->getSprite().getGlobalBounds().contains(x_coord_2, y_coord))
+            this->cars[carGoingDown]->setStopSprite(true);
+
+        return;
     }
+    else
+        this->cars[carGoingDown]->setStopSprite(false);
 
 }
 
+
+void Game::handleHorizontalCarCollisions(){
+    //collisions where cars moving horizontally hit cars moving vertically
+    const unsigned int carGoingUp = 0;
+    const unsigned int carGoingDown = 1;
+    const unsigned int carGoingRight = 2;
+    const unsigned int carGoingLeft = 3;
+
+    const float collisionDist = 5.f;
+    const float removeEmptyCollisionSpace = 8.f;
+
+    //Car going right hits car going down as it is on its way
+    if(this->cars[carGoingRight]->checkCarCollision(*this->cars[carGoingDown])){
+        auto x_coord = this->cars[carGoingRight]->getSprite().getGlobalBounds().left + this->cars[carGoingRight]->getSprite().getGlobalBounds().width + collisionDist;
+        auto y_coord_1 = this->cars[carGoingRight]->getSprite().getGlobalBounds().top + removeEmptyCollisionSpace;
+        auto y_coord_2 = this->cars[carGoingRight]->getSprite().getGlobalBounds().top + this->cars[carGoingRight]->getSprite().getGlobalBounds().height - removeEmptyCollisionSpace;
+
+        if(this->cars[carGoingDown]->getSprite().getGlobalBounds().contains(x_coord, y_coord_1))
+            this->cars[carGoingRight]->setStopSprite(true);
+        else if(this->cars[carGoingDown]->getSprite().getGlobalBounds().contains(x_coord, y_coord_2))
+            this->cars[carGoingRight]->setStopSprite(true);
+
+        return;
+    }
+    else
+        this->cars[carGoingRight]->setStopSprite(false);
+
+    //Car going right hits car going up as it is on its way
+    if(this->cars[carGoingRight]->checkCarCollision(*this->cars[carGoingUp])){
+        auto x_coord = this->cars[carGoingRight]->getSprite().getGlobalBounds().left + this->cars[carGoingRight]->getSprite().getGlobalBounds().width + collisionDist;
+        auto y_coord_1 = this->cars[carGoingRight]->getSprite().getGlobalBounds().top + removeEmptyCollisionSpace;
+        auto y_coord_2 = this->cars[carGoingRight]->getSprite().getGlobalBounds().top + this->cars[carGoingRight]->getSprite().getGlobalBounds().height - removeEmptyCollisionSpace;
+
+
+        if(this->cars[carGoingUp]->getSprite().getGlobalBounds().contains(x_coord, y_coord_1))
+            this->cars[carGoingRight]->setStopSprite(true);
+        else if(this->cars[carGoingUp]->getSprite().getGlobalBounds().contains(x_coord, y_coord_2))
+            this->cars[carGoingRight]->setStopSprite(true);
+
+        return;
+    }
+    else
+        this->cars[carGoingRight]->setStopSprite(false);
+
+    //Car going left hits car going down as it is on its way
+    if(this->cars[carGoingLeft]->checkCarCollision(*this->cars[carGoingDown])){
+        auto x_coord = this->cars[carGoingLeft]->getSprite().getGlobalBounds().left - collisionDist;
+        auto y_coord_1 = this->cars[carGoingLeft]->getSprite().getGlobalBounds().top + removeEmptyCollisionSpace;
+        auto y_coord_2 = this->cars[carGoingLeft]->getSprite().getGlobalBounds().top + this->cars[carGoingRight]->getSprite().getGlobalBounds().height - removeEmptyCollisionSpace;
+
+        if(this->cars[carGoingDown]->getSprite().getGlobalBounds().contains(x_coord, y_coord_1))
+            this->cars[carGoingLeft]->setStopSprite(true);
+        else if(this->cars[carGoingDown]->getSprite().getGlobalBounds().contains(x_coord, y_coord_2))
+            this->cars[carGoingLeft]->setStopSprite(true);
+
+        return;
+    }
+    else
+        this->cars[carGoingLeft]->setStopSprite(false);
+
+    //Car going left hits car going up as it is on its way
+    if(this->cars[carGoingLeft]->checkCarCollision(*this->cars[carGoingUp])){
+        auto x_coord = this->cars[carGoingLeft]->getSprite().getGlobalBounds().left - collisionDist;
+        auto y_coord_1 = this->cars[carGoingLeft]->getSprite().getGlobalBounds().top + removeEmptyCollisionSpace;
+        auto y_coord_2 = this->cars[carGoingLeft]->getSprite().getGlobalBounds().top + this->cars[carGoingRight]->getSprite().getGlobalBounds().height - removeEmptyCollisionSpace;
+
+        if(this->cars[carGoingUp]->getSprite().getGlobalBounds().contains(x_coord, y_coord_1))
+            this->cars[carGoingLeft]->setStopSprite(true);
+        else if(this->cars[carGoingUp]->getSprite().getGlobalBounds().contains(x_coord, y_coord_2))
+            this->cars[carGoingLeft]->setStopSprite(true);
+
+        return;
+    }
+    else
+        this->cars[carGoingLeft]->setStopSprite(false);
+
+}
