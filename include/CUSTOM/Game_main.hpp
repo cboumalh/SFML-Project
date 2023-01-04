@@ -2,6 +2,7 @@
 #ifndef GAME_MAIN_HPP
 #define GAME_MAIN_HPP
 
+#define SFML_AUDIO_PROVIDES_MP3_DECODER
 #include "Character_main.hpp"
 #include "Car_main.hpp"
 #include "Coin_main.hpp"
@@ -24,6 +25,9 @@ class Game{
         bool endGame;
         sf::Event sfmlEvent;
         sf::Clock clock;
+        sf::Music highwaySound;
+        sf::SoundBuffer buffer;
+        sf::Sound coinSound;
 
         Character *player;
         std::vector<Car*> cars;
@@ -37,9 +41,11 @@ class Game{
         void initText();
         void initFonts();
         void initPlayer();
+        void initCoinSound();
         void initBackgroundSprite();
         void initBackgroundTexture();
         void renderBackground();
+        void initHighwaySound();
         void updateView();
         void handleVerticalCarCollisions();
         void handleHorizontalCarCollisions();
@@ -49,6 +55,7 @@ class Game{
         void updateEndGameText();
         void updatePlayerCoinCollision();
         void speedUpGame();
+        void stopHighwaySound();
         
     public:
         Game();

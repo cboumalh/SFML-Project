@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -Wall -g -c
-SFMLFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+SFMLFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 all: project
 

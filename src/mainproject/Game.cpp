@@ -13,12 +13,14 @@ Game::Game(){
     this->initPlayer();
     this->initCoin();
     this->initText();
+    this->initCoinSound();
     this->initCars();
     this->initFonts();
     this->initBackgroundTexture();
     this->initView();
     this->initWindow();
     this->initBackgroundSprite();
+    this->initHighwaySound();
 }
 
 
@@ -41,6 +43,28 @@ void Game::initCars(){
 
 void Game::initPlayer(){
     this->player = new Character();
+}
+
+void Game::initHighwaySound(){
+    if (!this->highwaySound.openFromFile("../sounds/highwaySound.ogg"))
+         std::cout<< "Traffic sound did not load" << std::endl;
+
+    // Set the volume and play the music
+    this->highwaySound.setVolume(50);
+    this->highwaySound.play();
+    this->highwaySound.setLoop(true);  
+}
+
+void Game::stopHighwaySound(){
+    this->highwaySound.setVolume(0);
+}
+
+void Game::initCoinSound(){
+    if (!this->buffer.loadFromFile("../sounds/coinSound.ogg"))
+        std::cout<< "Coin sound did not load" << std::endl;
+
+
+    this->coinSound.setBuffer(buffer);
 }
 
 void Game::initCoin(){
@@ -192,6 +216,7 @@ void Game::updatePlayerCoinCollision(){
     if(this->coin->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds())) {
         this->coin->updateSpritePos(this->window);
         this->points++;
+        this->coinSound.play();
     }
 }
 
@@ -364,7 +389,10 @@ void Game::handleHorizontalCarCollisions(){
 
 void Game::CharacterCarCollided(){
     for(auto &car : this->cars)
-        if(car->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds())) this->endGame = true;
+        if(car->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds())) {
+            this->endGame = true;
+            this->stopHighwaySound();
+        }
 }
 
 void Game::speedUpGame(){
