@@ -4,6 +4,8 @@
 
 #include "Character_main.hpp"
 #include "Car_main.hpp"
+#include "Coin_main.hpp"
+
 
 class Game{
     private:
@@ -24,10 +26,12 @@ class Game{
 
         Character *player;
         std::vector<Car*> cars;
+        Coin *coin;
 
         void initVariables();
         void initWindow();
         void initView();
+        void initCoin();
         void initCars();
         void initText();
         void initFonts();
@@ -42,6 +46,7 @@ class Game{
         void updateGui();
         void renderGui(sf::RenderTarget* target);
         void updateEndGameText();
+        void updatePlayerCoinCollision();
         
     public:
         Game();

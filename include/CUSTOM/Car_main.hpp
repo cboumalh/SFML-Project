@@ -16,6 +16,7 @@ class Car {
         sf::Sprite sprite;
         sf::Texture texture;
         float carSpeed;
+        float maxCarSpeed;
         char direction;
         float x_pos;
         float y_pos;
@@ -39,7 +40,7 @@ class Car {
         const float getCarSpeed() const;
         void setStopSprite(bool value);
         const float getCarDirection() const;
-        const bool isSpriteMoving() const;
+        const bool getStopSpriteVal() const;
 
 
 };

@@ -16,6 +16,7 @@ void Car::initVariables(float &x_pos, float &y_pos, float &carSpeed, const char 
     this->carSpeed = carSpeed;
     this->x_pos = x_pos;
     this->y_pos = y_pos;
+    this->maxCarSpeed = 4.f;
     this->stopSprite = false;
 }
 
@@ -121,6 +122,6 @@ const float Car::getCarDirection() const {
     return this->direction;
 }
 
-const bool Car::isSpriteMoving() const{
+const bool Car::getStopSpriteVal() const{
     return this->stopSprite;
 }

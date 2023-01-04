@@ -4,12 +4,14 @@
 Game::~Game(){
     delete this->window;
     delete this->player;
+    delete this->coin;
 }
 
 
 Game::Game(){
     this->initVariables();
     this->initPlayer();
+    this->initCoin();
     this->initText();
     this->initCars();
     this->initFonts();
@@ -41,6 +43,9 @@ void Game::initPlayer(){
     this->player = new Character();
 }
 
+void Game::initCoin(){
+    this->coin = new Coin();
+}
 
 void Game::initFonts(){
 	if (!this->font.loadFromFile("../fonts/Caladea-Regular.ttf")){
@@ -134,6 +139,8 @@ void Game::render(){
 
     this->player->render(this->window);
 
+    this->coin->render(this->window);
+
     this->renderGui(this->window);
     if(this->endGame == true)
 		this->window->draw(this->endGameText);
@@ -152,6 +159,7 @@ void Game::update(){
         this->handleHorizontalCarCollisions();
         this->player->update(this->window);
         this->CharacterCarCollided();
+        this->updatePlayerCoinCollision();
         this->updateGui();
         this->updateEndGameText();
         this->updateView();
@@ -177,6 +185,13 @@ void Game::updateGui(){
 
 void Game::updateEndGameText(){
 	this->endGameText.setPosition(this->view.getCenter().x - this->endGameText.getLocalBounds().width / 2.f, this->view.getCenter().y - this->endGameText.getLocalBounds().height / 2.f);
+}
+
+void Game::updatePlayerCoinCollision(){
+    if(this->coin->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds())) {
+        this->coin->updateSpritePos(this->window);
+        this->points++;
+    }
 }
 
 void Game::pollEvents(){
