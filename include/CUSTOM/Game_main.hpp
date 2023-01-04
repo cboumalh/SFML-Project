@@ -28,6 +28,7 @@ class Game{
         void initBackgroundTexture();
         void renderBackground();
         void updateView();
+        void handleCarCollisions();
 
     public:
 

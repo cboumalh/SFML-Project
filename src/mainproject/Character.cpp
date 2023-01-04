@@ -58,7 +58,7 @@ void Character::initTextures(){
 
 void Character::initSpritePos(){
     float middle_x = 400.f - this->sprite.getGlobalBounds().width / 2.f;
-    float middle_y = 300.f - this->sprite.getGlobalBounds().height / 2.f;
+    float middle_y = 400.f - this->sprite.getGlobalBounds().height / 2.f;
 
     this->sprite.setPosition(middle_x, middle_y);
     

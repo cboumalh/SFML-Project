@@ -19,6 +19,7 @@ class Car {
         char direction;
         float x_pos;
         float y_pos;
+        bool stopSprite;
 
         void initVariables(float &x_pos, float &y_pos, float &carSpeed, const char &direction);
         void initTexture(const std::string &texturePath);
@@ -33,6 +34,13 @@ class Car {
         void update(const sf::RenderTarget* target);
         void render(sf::RenderTarget* target);
         void updateWindowBoundsCollision(const sf::RenderTarget *target);
+        const bool checkCarCollision(Car &other_car) const;
+        const sf::Sprite & getSprite();
+        const float getCarSpeed() const;
+        void setStopSprite(bool value);
+        const float getCarDirection() const;
+        const bool isSpriteMoving() const;
+
 
 };
 
