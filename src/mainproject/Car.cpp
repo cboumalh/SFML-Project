@@ -125,3 +125,8 @@ const float Car::getCarDirection() const {
 const bool Car::getStopSpriteVal() const{
     return this->stopSprite;
 }
+
+void Car::incrementCarSpeed(){
+    if(this->carSpeed < this->maxCarSpeed)
+        this->carSpeed += 0.1f;
+}

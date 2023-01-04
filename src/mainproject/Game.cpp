@@ -161,6 +161,7 @@ void Game::update(){
         this->CharacterCarCollided();
         this->updatePlayerCoinCollision();
         this->updateGui();
+        this->speedUpGame();
         this->updateEndGameText();
         this->updateView();
     }
@@ -365,3 +366,12 @@ void Game::CharacterCarCollided(){
     for(auto &car : this->cars)
         if(car->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds())) this->endGame = true;
 }
+
+void Game::speedUpGame(){
+    if(this->clock.getElapsedTime().asSeconds() > 10.f){
+        for(auto &car : this->cars)
+            car->incrementCarSpeed();
+        this->clock.restart();
+    }
+}
+
