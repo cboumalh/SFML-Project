@@ -21,6 +21,7 @@ class Game{
         sf::Font font;
 	    sf::Text guiText;
 	    sf::Text endGameText;
+        unsigned int clockRestartCounter;
 
         bool endGame;
         sf::Event sfmlEvent;
@@ -51,11 +52,15 @@ class Game{
         void handleHorizontalCarCollisions();
         void CharacterCarCollided();
         void updateGui();
+        void updateMode();
         void renderGui(sf::RenderTarget* target);
         void updateEndGameText();
         void updatePlayerCoinCollision();
         void speedUpGame();
         void stopHighwaySound();
+        void nightMode();
+        void dayMode();
+
         
     public:
         Game();

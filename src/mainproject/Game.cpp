@@ -30,6 +30,7 @@ void Game::initVariables(){
     this->height = 800.f;
     this->endGame = false;
     this->points = 0;
+    this->clockRestartCounter = 0;
 
 }
 
@@ -143,6 +144,23 @@ void Game::initBackgroundSprite(){
     );
 }
 
+void Game::nightMode(){
+    this->backgroundSprite.setColor(sf::Color(255, 255, 255, 128));
+}
+
+void Game::dayMode(){
+    this->backgroundSprite.setColor(sf::Color(255, 255, 255, 255));
+}
+
+void Game::updateMode(){
+    if(this->clockRestartCounter > 3){
+        this->nightMode();
+        if(this->clockRestartCounter == 7) this->clockRestartCounter = 0;
+    }
+    else
+        this->dayMode();
+}
+
 void Game::renderBackground(){
 
     this->window->draw(this->backgroundSprite); 
@@ -188,6 +206,7 @@ void Game::update(){
         this->speedUpGame();
         this->updateEndGameText();
         this->updateView();
+        this->updateMode();
     }
 }
 
@@ -400,6 +419,7 @@ void Game::speedUpGame(){
         for(auto &car : this->cars)
             car->incrementCarSpeed();
         this->clock.restart();
+        this->clockRestartCounter += 1;
     }
 }
 
