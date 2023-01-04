@@ -9,6 +9,10 @@ Game::~Game(){
 
 Game::Game(){
     this->initVariables();
+    this->initPlayer();
+    this->initText();
+    this->initCars();
+    this->initFonts();
     this->initBackgroundTexture();
     this->initView();
     this->initWindow();
@@ -21,12 +25,44 @@ void Game::initVariables(){
     this->width = 800.f;
     this->height = 800.f;
     this->endGame = false;
-    this->player = new Character();
-    this->cars.push_back(new Car("../textures/car_1.png", this->width / 2.f + 15.f, this->width / 2.f, 3.f, 'U'));
-    this->cars.push_back(new Car("../textures/car_2.png", this->width / 2.1f, this->height / 2.f, 3.f, 'D'));
-    this->cars.push_back(new Car("../textures/car_3.png", 0.f, this->height / 1.8f, 3.f, 'R'));
-    this->cars.push_back(new Car("../textures/car_4.png", this->width, this->height / 2.1f, 3.f, 'L'));
+    this->points = 0;
 
+}
+
+void Game::initCars(){
+    this->cars.push_back(new Car("../textures/car_1.png", this->width / 2.f + 15.f, this->width / 2.f, 1.5f, 'U'));
+    this->cars.push_back(new Car("../textures/car_2.png", this->width / 2.1f, this->height / 2.f, 1.5f, 'D'));
+    this->cars.push_back(new Car("../textures/car_3.png", 0.f, this->height / 1.8f, 1.5f, 'R'));
+    this->cars.push_back(new Car("../textures/car_4.png", this->width, this->height / 2.1f, 1.5f, 'L'));
+
+}
+
+void Game::initPlayer(){
+    this->player = new Character();
+}
+
+
+void Game::initFonts(){
+	if (!this->font.loadFromFile("../fonts/Caladea-Regular.ttf")){
+		std::cout << "FONT DID NOT LOAD" << std::endl;
+	}
+}
+
+
+void Game::initText()
+{
+	//Gui text init
+	this->guiText.setFont(this->font);
+	this->guiText.setFillColor(sf::Color::White);
+	this->guiText.setCharacterSize(20);
+	this->guiText.setFillColor(sf::Color::Black);
+
+
+	//End game text
+	this->endGameText.setFont(this->font);
+	this->endGameText.setFillColor(sf::Color::Black);
+	this->endGameText.setCharacterSize(30);
+	this->endGameText.setString("YOU DIED!");
 }
 
 void Game::initBackgroundTexture(){
@@ -83,6 +119,10 @@ void Game::renderBackground(){
     this->window->draw(this->backgroundSprite); 
 }
 
+void Game::renderGui(sf::RenderTarget* target){
+	target->draw(this->guiText);
+}
+
 
 void Game::render(){
     this->window->clear();
@@ -94,20 +134,28 @@ void Game::render(){
 
     this->player->render(this->window);
 
+    this->renderGui(this->window);
+    if(this->endGame == true)
+		this->window->draw(this->endGameText);
+
     this->window->display();
 
 }
 
 
 void Game::update(){
-
     this->pollEvents();
-    for(auto &car : this->cars)
-        car->update(this->window);
-    this->handleVerticalCarCollisions();
-    this->handleHorizontalCarCollisions();
-    this->player->update(this->window);
-    this->updateView();
+    if(this->endGame == false){
+        for(auto &car : this->cars)
+            car->update(this->window);
+        this->handleVerticalCarCollisions();
+        this->handleHorizontalCarCollisions();
+        this->player->update(this->window);
+        this->CharacterCarCollided();
+        this->updateGui();
+        this->updateEndGameText();
+        this->updateView();
+    }
 }
 
 
@@ -116,6 +164,20 @@ const bool Game::running() const{
     return this->window->isOpen();
 }
 
+void Game::updateGui(){
+	std::stringstream ss;
+
+	ss << " Points: " << this->points << std::endl;
+
+	this->guiText.setString(ss.str());
+    this->guiText.setPosition(this->view.getCenter().x - this->view.getSize().x / 2.f, this->view.getCenter().y - this->view.getSize().y / 2.f);
+
+}
+
+
+void Game::updateEndGameText(){
+	this->endGameText.setPosition(this->view.getCenter().x - this->endGameText.getLocalBounds().width / 2.f, this->view.getCenter().y - this->endGameText.getLocalBounds().height / 2.f);
+}
 
 void Game::pollEvents(){
     
@@ -282,4 +344,9 @@ void Game::handleHorizontalCarCollisions(){
     else
         this->cars[carGoingLeft]->setStopSprite(false);
 
+}
+
+void Game::CharacterCarCollided(){
+    for(auto &car : this->cars)
+        if(car->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds())) this->endGame = true;
 }

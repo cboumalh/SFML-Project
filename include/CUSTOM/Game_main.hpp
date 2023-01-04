@@ -12,8 +12,12 @@ class Game{
         sf::View view;
         float width;
         float height;
+        unsigned int points;
         sf::Texture backgroundTexture;
         sf::Sprite backgroundSprite;
+        sf::Font font;
+	    sf::Text guiText;
+	    sf::Text endGameText;
 
         bool endGame;
         sf::Event sfmlEvent;
@@ -24,15 +28,22 @@ class Game{
         void initVariables();
         void initWindow();
         void initView();
+        void initCars();
+        void initText();
+        void initFonts();
+        void initPlayer();
         void initBackgroundSprite();
         void initBackgroundTexture();
         void renderBackground();
         void updateView();
         void handleVerticalCarCollisions();
         void handleHorizontalCarCollisions();
-
+        void CharacterCarCollided();
+        void updateGui();
+        void renderGui(sf::RenderTarget* target);
+        void updateEndGameText();
+        
     public:
-
         Game();
         ~Game();
 

@@ -57,10 +57,10 @@ void Character::initTextures(){
 
 
 void Character::initSpritePos(){
-    float middle_x = 400.f - this->sprite.getGlobalBounds().width / 2.f;
-    float middle_y = 400.f - this->sprite.getGlobalBounds().height / 2.f;
+    float init_x = 200.f;
+    float init_y = 200.f;
 
-    this->sprite.setPosition(middle_x, middle_y);
+    this->sprite.setPosition(init_x, init_y);
     
 }
 
@@ -199,7 +199,9 @@ const sf::FloatRect Character::getPlayerPos() const {
     return this->sprite.getGlobalBounds();
 }
 
-
+const sf::Sprite & Character::getSprite(){
+    return this->sprite;
+}
 
 
 

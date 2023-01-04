@@ -5,6 +5,7 @@
 #include<iostream>
 #include<ctime>
 #include <vector>
+#include<sstream>
 
 #include<SFML/Graphics.hpp>
 #include<SFML/Window.hpp>
@@ -38,8 +39,7 @@ class Character{
         void updateWindowBoundsCollision(const sf::RenderTarget *target);
         const sf::FloatRect getPlayerPos() const;
         void moveCharacter();
-
-
+        const sf::Sprite & getSprite();
 
 };
 
