@@ -41,6 +41,7 @@ class Car {
         void setStopSprite(bool value);
         const float getCarDirection() const;
         const bool getStopSpriteVal() const;
+        void incrementCarSpeed();
 
 
 };

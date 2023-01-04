@@ -23,6 +23,7 @@ class Game{
 
         bool endGame;
         sf::Event sfmlEvent;
+        sf::Clock clock;
 
         Character *player;
         std::vector<Car*> cars;
@@ -47,6 +48,7 @@ class Game{
         void renderGui(sf::RenderTarget* target);
         void updateEndGameText();
         void updatePlayerCoinCollision();
+        void speedUpGame();
         
     public:
         Game();
