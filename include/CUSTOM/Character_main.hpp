@@ -27,6 +27,7 @@ class Character{
         void initSprite();
         void initSpritePos();
         void updateSprite();
+    
         
     public:
         Character();
@@ -39,7 +40,8 @@ class Character{
         void updateWindowBoundsCollision(const sf::RenderTarget *target);
         const sf::FloatRect getPlayerPos() const;
         void moveCharacter();
-        const sf::Sprite & getSprite();
+        sf::Sprite & getSprite();
+
 
 };
 

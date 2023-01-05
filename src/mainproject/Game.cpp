@@ -5,6 +5,7 @@ Game::~Game(){
     delete this->window;
     delete this->player;
     delete this->coin;
+    delete this->potion;
 }
 
 
@@ -13,7 +14,9 @@ Game::Game(){
     this->initPlayer();
     this->initCoin();
     this->initText();
+    this->initPotion();
     this->initCoinSound();
+    this->initPotionSound();
     this->initCars();
     this->initFonts();
     this->initBackgroundTexture();
@@ -31,6 +34,7 @@ void Game::initVariables(){
     this->endGame = false;
     this->points = 0;
     this->clockRestartCounter = 0;
+    this->playerInvisible = false;
 
 }
 
@@ -51,7 +55,7 @@ void Game::initHighwaySound(){
          std::cout<< "Traffic sound did not load" << std::endl;
 
     // Set the volume and play the music
-    this->highwaySound.setVolume(50);
+    this->highwaySound.setVolume(30);
     this->highwaySound.play();
     this->highwaySound.setLoop(true);  
 }
@@ -61,15 +65,27 @@ void Game::stopHighwaySound(){
 }
 
 void Game::initCoinSound(){
-    if (!this->buffer.loadFromFile("../sounds/coinSound.ogg"))
+    if (!this->coinBuffer.loadFromFile("../sounds/coinSound.ogg"))
         std::cout<< "Coin sound did not load" << std::endl;
 
 
-    this->coinSound.setBuffer(buffer);
+    this->coinSound.setBuffer(coinBuffer);
+}
+
+void Game::initPotionSound(){
+    if (!this->potionBuffer.loadFromFile("../sounds/potionSound.ogg"))
+        std::cout<< "Potion sound did not load" << std::endl;
+
+
+    this->potionSound.setBuffer(potionBuffer);
 }
 
 void Game::initCoin(){
     this->coin = new Coin();
+}
+
+void Game::initPotion(){
+    this->potion = new Potion();
 }
 
 void Game::initFonts(){
@@ -183,6 +199,8 @@ void Game::render(){
 
     this->coin->render(this->window);
 
+    this->potion->render(this->window);
+
     this->renderGui(this->window);
     if(this->endGame == true)
 		this->window->draw(this->endGameText);
@@ -202,8 +220,10 @@ void Game::update(){
         this->player->update(this->window);
         this->CharacterCarCollided();
         this->updatePlayerCoinCollision();
+        this->updatePlayerPotionCollision();
         this->updateGui();
         this->speedUpGame();
+        this->makePlayerVisible();
         this->updateEndGameText();
         this->updateView();
         this->updateMode();
@@ -236,6 +256,29 @@ void Game::updatePlayerCoinCollision(){
         this->coin->updateSpritePos(this->window);
         this->points++;
         this->coinSound.play();
+    }
+}
+
+void Game::makePlayerInvisible(){
+    this->playerInvisible = true;
+    this->player->getSprite().setColor(sf::Color(255, 255, 255, 128));
+}
+
+void Game::makePlayerVisible(){
+    if(this->potionClock.getElapsedTime().asSeconds() > 5.f){
+        this->playerInvisible = false;
+        this->player->getSprite().setColor(sf::Color(255, 255, 255, 255));
+    }
+}
+
+void Game::updatePlayerPotionCollision(){
+    if(this->potion->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds()) && this->potion->getActiveBool()){
+        this->potion->updateSpritePos(this->window);
+        this->potion->getClock().restart();
+        this->potion->setActiveBool(false);
+        this->potionSound.play();
+        this->makePlayerInvisible();
+        this->potionClock.restart();
     }
 }
 
@@ -408,7 +451,7 @@ void Game::handleHorizontalCarCollisions(){
 
 void Game::CharacterCarCollided(){
     for(auto &car : this->cars)
-        if(car->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds())) {
+        if(car->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds()) && !this->playerInvisible) {
             this->endGame = true;
             this->stopHighwaySound();
         }

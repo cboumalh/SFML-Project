@@ -199,9 +199,8 @@ const sf::FloatRect Character::getPlayerPos() const {
     return this->sprite.getGlobalBounds();
 }
 
-const sf::Sprite & Character::getSprite(){
+sf::Sprite & Character::getSprite(){
     return this->sprite;
 }
-
 
 

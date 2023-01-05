@@ -4,8 +4,8 @@ SFMLFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 all: project
 
-project: main.o Game.o Character.o Car.o Coin.o
-	$(CC) -Wall main.o Game.o Character.o Car.o Coin.o -o project -L ../../lib $(SFMLFLAGS)
+project: main.o Game.o Character.o Car.o Coin.o Potion.o
+	$(CC) -Wall main.o Game.o Character.o Car.o Coin.o Potion.o -o project -L ../../lib $(SFMLFLAGS)
 	
 main.o: main.cpp ../../include/CUSTOM/Game_main.hpp
 	$(CC) $(CFLAGS) main.cpp -I ../../include
@@ -21,6 +21,10 @@ Car.o: Car.cpp ../../include/CUSTOM/Car_main.hpp
 
 Coin.o: Coin.cpp ../../include/CUSTOM/Coin_main.hpp
 	$(CC) $(CFLAGS) Coin.cpp -I ../../include
+
+Potion.o: Potion.cpp ../../include/CUSTOM/Potion_main.hpp
+	$(CC) $(CFLAGS) Potion.cpp -I ../../include
+
 
 clean:
 	rm -rf *.o project
