@@ -1,6 +1,4 @@
 #include "../../include/CUSTOM/Coin_main.hpp"
-#include "../../include/CUSTOM/Character_main.hpp"
-
 
 Coin::Coin(){
     this->initTexture();

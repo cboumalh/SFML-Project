@@ -21,6 +21,7 @@ class Character{
         float movementSpeed;
         unsigned int currDirection;
         unsigned int nbrTextures;
+        bool tookPotion;
 
         void initVariables();
         void initTextures();
@@ -41,6 +42,8 @@ class Character{
         const sf::FloatRect getPlayerPos() const;
         void moveCharacter();
         sf::Sprite & getSprite();
+        const bool getTookPotion() const;
+        void setTookPotion(bool value);
 
 
 };

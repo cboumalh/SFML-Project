@@ -17,11 +17,11 @@ class Potion{
     private:
         sf::Texture texture;
         sf::Sprite sprite;
-        sf::Clock clock;
         bool potionActive;
         
         void initTexture();
         void initSprite();
+        void initVariables();
         
     public:
         Potion();
@@ -31,7 +31,6 @@ class Potion{
         void render(sf::RenderTarget *target);
         const sf::Sprite & getSprite();
         const bool getActiveBool() const;
-        sf::Clock & getClock();
         void setActiveBool(bool value);
 
 };

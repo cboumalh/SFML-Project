@@ -7,6 +7,7 @@
 #include "Car_main.hpp"
 #include "Coin_main.hpp"
 #include "Potion_main.hpp"
+#include "Ghost_main.hpp"
 
 
 class Game{
@@ -26,9 +27,11 @@ class Game{
         bool playerInvisible;
 
         bool endGame;
+        bool nightModeOn;
         sf::Event sfmlEvent;
         sf::Clock clock;
         sf::Clock potionClock;
+        float potionDuration;
         sf::Music highwaySound;
         sf::SoundBuffer coinBuffer;
         sf::Sound coinSound;
@@ -39,6 +42,7 @@ class Game{
         std::vector<Car*> cars;
         Coin *coin;
         Potion *potion;
+        Ghost *ghost;
 
         void initVariables();
         void initWindow();
@@ -48,6 +52,7 @@ class Game{
         void initCars();
         void initText();
         void initFonts();
+        void initGhost();
         void initPlayer();
         void initCoinSound();
         void initPotionSound();
@@ -58,19 +63,23 @@ class Game{
         void updateView();
         void handleVerticalCarCollisions();
         void handleHorizontalCarCollisions();
-        void CharacterCarCollided();
+        void PlayerCarCollision();
         void updateGui();
         void updateMode();
         void renderGui(sf::RenderTarget* target);
         void updateEndGameText();
         void updatePlayerCoinCollision();
         void updatePlayerPotionCollision();
+        void GhostPlayerCollision();
         void speedUpGame();
         void stopHighwaySound();
         void nightMode();
         void dayMode();
         void makePlayerInvisible();
         void makePlayerVisible();
+        void renderPotion(sf::RenderTarget *target);
+        void renderGhost(sf::RenderTarget *target);
+        void updateGhost();
 
         
     public:

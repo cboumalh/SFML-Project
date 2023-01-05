@@ -17,6 +17,7 @@ Game::Game(){
     this->initPotion();
     this->initCoinSound();
     this->initPotionSound();
+    this->initGhost();
     this->initCars();
     this->initFonts();
     this->initBackgroundTexture();
@@ -35,6 +36,8 @@ void Game::initVariables(){
     this->points = 0;
     this->clockRestartCounter = 0;
     this->playerInvisible = false;
+    this->nightModeOn = false;
+    this->potionDuration = 20.f;
 
 }
 
@@ -48,6 +51,10 @@ void Game::initCars(){
 
 void Game::initPlayer(){
     this->player = new Character();
+}
+
+void Game::initGhost(){
+    this->ghost = new Ghost(this->player);
 }
 
 void Game::initHighwaySound(){
@@ -172,9 +179,12 @@ void Game::updateMode(){
     if(this->clockRestartCounter > 3){
         this->nightMode();
         if(this->clockRestartCounter == 7) this->clockRestartCounter = 0;
+        this->nightModeOn = true;
     }
-    else
+    else{
         this->dayMode();
+        this->nightModeOn = false;
+    }
 }
 
 void Game::renderBackground(){
@@ -199,9 +209,12 @@ void Game::render(){
 
     this->coin->render(this->window);
 
-    this->potion->render(this->window);
+    this->renderPotion(this->window);
+
+    this->renderGhost(this->window);
 
     this->renderGui(this->window);
+
     if(this->endGame == true)
 		this->window->draw(this->endGameText);
 
@@ -209,6 +222,28 @@ void Game::render(){
 
 }
 
+void Game::renderPotion(sf::RenderTarget *target){
+    if(this->potionClock.getElapsedTime().asSeconds() > this->potionDuration){
+        this->potion->setActiveBool(true);
+        this->potion->render(target);
+    }
+}
+
+void Game::renderGhost(sf::RenderTarget *target){
+    if(this->nightModeOn){
+        this->ghost->render(target);
+    }
+}
+
+void Game::updateGhost(){
+    if(this->nightModeOn){
+        this->ghost->setActiveBool(true);
+        this->ghost->updateSpritePos(this->player);
+    }
+    else{
+        this->ghost->setActiveBool(false);
+    }
+}
 
 void Game::update(){
     this->pollEvents();
@@ -218,10 +253,12 @@ void Game::update(){
         this->handleVerticalCarCollisions();
         this->handleHorizontalCarCollisions();
         this->player->update(this->window);
-        this->CharacterCarCollided();
+        this->PlayerCarCollision();
         this->updatePlayerCoinCollision();
         this->updatePlayerPotionCollision();
         this->updateGui();
+        this->updateGhost();
+        this->GhostPlayerCollision();
         this->speedUpGame();
         this->makePlayerVisible();
         this->updateEndGameText();
@@ -260,13 +297,13 @@ void Game::updatePlayerCoinCollision(){
 }
 
 void Game::makePlayerInvisible(){
-    this->playerInvisible = true;
+    this->player->setTookPotion(true);
     this->player->getSprite().setColor(sf::Color(255, 255, 255, 128));
 }
 
 void Game::makePlayerVisible(){
     if(this->potionClock.getElapsedTime().asSeconds() > 5.f){
-        this->playerInvisible = false;
+        this->player->setTookPotion(false);
         this->player->getSprite().setColor(sf::Color(255, 255, 255, 255));
     }
 }
@@ -274,7 +311,6 @@ void Game::makePlayerVisible(){
 void Game::updatePlayerPotionCollision(){
     if(this->potion->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds()) && this->potion->getActiveBool()){
         this->potion->updateSpritePos(this->window);
-        this->potion->getClock().restart();
         this->potion->setActiveBool(false);
         this->potionSound.play();
         this->makePlayerInvisible();
@@ -449,12 +485,19 @@ void Game::handleHorizontalCarCollisions(){
 
 }
 
-void Game::CharacterCarCollided(){
+void Game::PlayerCarCollision(){
     for(auto &car : this->cars)
-        if(car->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds()) && !this->playerInvisible) {
+        if(car->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds()) && !this->player->getTookPotion()) {
             this->endGame = true;
             this->stopHighwaySound();
         }
+}
+
+void Game::GhostPlayerCollision(){
+    if(this->ghost->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds()) && this->ghost->getActiveBool()) {
+        this->endGame = true;
+        this->stopHighwaySound();
+    }
 }
 
 void Game::speedUpGame(){

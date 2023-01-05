@@ -19,6 +19,7 @@ void Character::initVariables(){
     this->textureChoice = 0;
     this->nbrTextures = 12;
     this->textures = new sf::Texture[this->nbrTextures];
+    this->tookPotion = false;
 
 }
 
@@ -204,3 +205,10 @@ sf::Sprite & Character::getSprite(){
 }
 
 
+const bool Character::getTookPotion() const{
+    return this->tookPotion;
+}
+
+void Character::setTookPotion(bool value) {
+    this->tookPotion = value;
+}

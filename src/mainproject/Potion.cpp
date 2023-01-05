@@ -5,6 +5,10 @@
 Potion::Potion(){
     this->initTexture();
     this->initSprite();
+    this->initVariables();
+}
+
+void Potion::initVariables(){
     this->potionActive = false;
 }
 
@@ -18,10 +22,6 @@ const sf::Sprite & Potion::getSprite(){
     return this->sprite;
 }
 
-sf::Clock & Potion::getClock(){
-    return this->clock;
-}
-
 
 const bool Potion::getActiveBool() const{
     return this->potionActive;
@@ -32,10 +32,8 @@ void Potion::setActiveBool(bool value){
 }
 
 void Potion::render(sf::RenderTarget *target){
-    if(this->clock.getElapsedTime().asSeconds() > 20.f){
-        this->potionActive = true;
-        target->draw(this->sprite);
-    }
+    target->draw(this->sprite);
+    
 }
 
 void Potion::updateSpritePos(const sf::RenderTarget* target){
@@ -55,5 +53,5 @@ void Potion::initTexture(){
 void Potion::initSprite(){
     this->sprite.setTexture(this->texture);
     this->sprite.setScale(0.15f, 0.15f);
-    this->sprite.setPosition(100.f, 100.f);
+    this->sprite.setPosition(70.f, 70.f);
 }
