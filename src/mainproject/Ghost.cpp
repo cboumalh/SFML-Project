@@ -21,11 +21,10 @@ const sf::Sprite & Ghost::getSprite(){
     return this->sprite;
 }
 
-
+//ghostActive is a bool to decide whether a collision between the player and the ghost will end the game or not
 const bool Ghost::getActiveBool() const{
     return this->ghostActive;
 }
-
 void Ghost::setActiveBool(bool value){
     this->ghostActive = value;
 }
@@ -34,6 +33,7 @@ void Ghost::render(sf::RenderTarget *target){
     target->draw(this->sprite);
 }
 
+// Make the ghost follow a player who's pointer is an argument. Basic vector arithmetic to for the math portion
 void Ghost::updateSpritePos(Character *thePlayer){
     sf::Vector2f vPlayer(thePlayer->getSprite().getPosition());
     sf::Vector2f vGhost(this->sprite.getPosition());

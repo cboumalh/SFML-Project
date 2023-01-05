@@ -37,7 +37,8 @@ void Game::initVariables(){
     this->clockRestartCounter = 0;
     this->playerInvisible = false;
     this->nightModeOn = false;
-    this->potionDuration = 20.f;
+    this->potionBreak = 20.f;
+    this->speedupDuration = 10.f;
 
 }
 
@@ -175,6 +176,7 @@ void Game::dayMode(){
     this->backgroundSprite.setColor(sf::Color(255, 255, 255, 255));
 }
 
+//Night time or day time
 void Game::updateMode(){
     if(this->clockRestartCounter > 3){
         this->nightMode();
@@ -196,7 +198,7 @@ void Game::renderGui(sf::RenderTarget* target){
 	target->draw(this->guiText);
 }
 
-
+//Main render function that draws everything
 void Game::render(){
     this->window->clear();
 
@@ -223,7 +225,7 @@ void Game::render(){
 }
 
 void Game::renderPotion(sf::RenderTarget *target){
-    if(this->potionClock.getElapsedTime().asSeconds() > this->potionDuration){
+    if(this->potionClock.getElapsedTime().asSeconds() > this->potionBreak){
         this->potion->setActiveBool(true);
         this->potion->render(target);
     }
@@ -235,6 +237,7 @@ void Game::renderGhost(sf::RenderTarget *target){
     }
 }
 
+//Ghost only moves in the night time
 void Game::updateGhost(){
     if(this->nightModeOn){
         this->ghost->setActiveBool(true);
@@ -245,6 +248,7 @@ void Game::updateGhost(){
     }
 }
 
+//Main function that runs all other update functions for other objects
 void Game::update(){
     this->pollEvents();
     if(this->endGame == false){
@@ -288,6 +292,7 @@ void Game::updateEndGameText(){
 	this->endGameText.setPosition(this->view.getCenter().x - this->endGameText.getLocalBounds().width / 2.f, this->view.getCenter().y - this->endGameText.getLocalBounds().height / 2.f);
 }
 
+//When player takes a coin increment the points and play a sound
 void Game::updatePlayerCoinCollision(){
     if(this->coin->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds())) {
         this->coin->updateSpritePos(this->window);
@@ -308,6 +313,7 @@ void Game::makePlayerVisible(){
     }
 }
 
+//Play potion sound, restart timer for the potion to be placed somewhere else after X amount of time, make player invisible
 void Game::updatePlayerPotionCollision(){
     if(this->potion->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds()) && this->potion->getActiveBool()){
         this->potion->updateSpritePos(this->window);
@@ -318,8 +324,8 @@ void Game::updatePlayerPotionCollision(){
     }
 }
 
+//To be able to close the screen using escape or pressing on the X
 void Game::pollEvents(){
-    
     while(this->window->pollEvent(this->sfmlEvent)){
         if(this->sfmlEvent.type == sf::Event::Closed || (this->sfmlEvent.type == sf::Event::KeyPressed && this->sfmlEvent.key.code == sf::Keyboard::Escape))
             this->window->close();
@@ -485,6 +491,7 @@ void Game::handleHorizontalCarCollisions(){
 
 }
 
+//End game when that happens
 void Game::PlayerCarCollision(){
     for(auto &car : this->cars)
         if(car->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds()) && !this->player->getTookPotion()) {
@@ -493,6 +500,7 @@ void Game::PlayerCarCollision(){
         }
 }
 
+//End game when that happens
 void Game::GhostPlayerCollision(){
     if(this->ghost->getSprite().getGlobalBounds().intersects(this->player->getSprite().getGlobalBounds()) && this->ghost->getActiveBool()) {
         this->endGame = true;
@@ -500,8 +508,9 @@ void Game::GhostPlayerCollision(){
     }
 }
 
+//Game speeds up cars a bit every 10 seconds
 void Game::speedUpGame(){
-    if(this->clock.getElapsedTime().asSeconds() > 10.f){
+    if(this->clock.getElapsedTime().asSeconds() > this->speedupDuration){
         for(auto &car : this->cars)
             car->incrementCarSpeed();
         this->clock.restart();

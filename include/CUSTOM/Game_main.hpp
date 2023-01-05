@@ -31,7 +31,8 @@ class Game{
         sf::Event sfmlEvent;
         sf::Clock clock;
         sf::Clock potionClock;
-        float potionDuration;
+        float potionBreak;
+        float speedupDuration;
         sf::Music highwaySound;
         sf::SoundBuffer coinBuffer;
         sf::Sound coinSound;
