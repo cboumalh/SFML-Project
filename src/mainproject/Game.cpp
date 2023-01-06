@@ -7,6 +7,8 @@ Game::~Game(){
     delete this->coin;
     delete this->potion;
     delete this->ghost;
+    for(auto &car : this->cars)
+        delete car;
 }
 
 
