@@ -6,6 +6,7 @@ Game::~Game(){
     delete this->player;
     delete this->coin;
     delete this->potion;
+    delete this->ghost;
 }
 
 
